@@ -34,8 +34,8 @@ export default Ember.Controller.extend({
     return date.isValid() ? date : false;
   },
 
-  // set the model according to our query parameters; if we cannot,
-  // set errors as to why.
+  // every time to/from changes, make sure the changes are valid; if
+  // not, push the appropriate error message.
   updateQuery: function() {
     this.set('errors', Ember.A([]));
     let from = this.get('from');
