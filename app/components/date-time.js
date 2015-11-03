@@ -1,13 +1,15 @@
 import Ember from 'ember';
 
+let formatter = window.EmberInterval.formatter;
+
 export default Ember.Component.extend({
 
   date: function() {
-    return moment(this.data, 'YYYY-MM-DDTHH:mm:ss').format('YYYY-MM-DD');
+    return moment(this.data, formatter).format('YYYY-MM-DD');
   }.property('data'),
 
   time: function() {
-    return moment(this.data, 'YYYY-MM-DDTHH:mm:ss').format('HH:mm:ss');
+    return moment(this.data, formatter).format('HH:mm:ss');
   }.property('data'),
 
   actions: {

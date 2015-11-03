@@ -12,6 +12,8 @@ import Ember from 'ember';
 
 // TL;DR this controller is a necessary evil!
 
+let formatter = window.EmberInterval.formatter;
+
 export default Ember.Controller.extend({
 
   queryParams: ['from', 'to'],
@@ -23,14 +25,13 @@ export default Ember.Controller.extend({
 
   validate (param) {
     let regex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/;
-    let format = 'YYYY-MM-DDTHH:mm:ss'; // TODO abstract out
     if (param.match(regex) === null) {
       return false;
     }
     // we match against an supported ISO-8601 string so moment can
     // automatically parse this string; nonetheless, it's better to
     // be explicit.
-    let date = moment(param, format);
+    let date = moment(param, formatter);
     return date.isValid() ? date : false;
   },
 
@@ -61,10 +62,10 @@ export default Ember.Controller.extend({
   updateDefaults: function() {
     let model = this.get('model');
     if(this.get('from') === null) {
-      this.set('from', model.from.format('YYYY-MM-DDTHH:mm:ss'));
+      this.set('from', model.from.format(formatter));
     }
     if(this.get('to') === null) {
-      this.set('to', model.to.format('YYYY-MM-DDTHH:mm:ss'));
+      this.set('to', model.to.format(formatter));
     }
     // TODO refresh (only if null)?
   }.observes('model'),
