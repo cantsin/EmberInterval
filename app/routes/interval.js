@@ -1,5 +1,10 @@
 import Ember from 'ember';
 
-export default Ember.Route.extend({
+// dummy model with default data
+import DateTimeModel from '../models/datetime';
 
+export default Ember.Route.extend({
+  model() {
+    return DateTimeModel.create();
+  }
 });
