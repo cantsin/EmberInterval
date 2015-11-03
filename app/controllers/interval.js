@@ -18,8 +18,46 @@ export default Ember.Controller.extend({
   from: null,
   to: null,
 
+  // validation errors, if any.
+  errors: Ember.A([]),
+
+  validate (param) {
+    let regex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/;
+    let format = 'YYYY-MM-DDTHH:mm:ss'; // TODO abstract out
+    if (param.match(regex) === null) {
+      return false;
+    }
+    // we match against an supported ISO-8601 string so moment can
+    // automatically parse this string; nonetheless, it's better to
+    // be explicit.
+    let date = moment(param, format);
+    return date.isValid() ? date : false;
+  },
+
+  // set the model according to our query parameters; if we cannot,
+  // set errors as to why.
+  updateQuery: function() {
+    this.set('errors', Ember.A([]));
+    let from = this.get('from');
+    let to = this.get('to');
+
+    let fromValid = this.validate(from);
+    if(!fromValid) {
+      this.errors.pushObject('Could not parse "from": "' + from + '"');
+    }
+    let toValid = this.validate(to);
+    if(!toValid) {
+      this.errors.pushObject('Could not parse "to": "' + to + '"');
+    }
+    if(fromValid && toValid) {
+      if(fromValid.isAfter(toValid)) {
+        this.errors.pushObject('"from" parameter cannot be after "to"');
+      }
+    }
+  }.observes('from', 'to'),
+
   // if one (or both) of our query parameters happens to be blank,
-  // fill it in with default values from the default model.
+  // fill it in with default values from the passed-in model.
   updateDefaults: function() {
     let model = this.get('model');
     if(this.get('from') === null) {
@@ -28,7 +66,6 @@ export default Ember.Controller.extend({
     if(this.get('to') === null) {
       this.set('to', model.to.format('YYYY-MM-DDTHH:mm:ss'));
     }
-    console.log(this);
     // TODO refresh (only if null)?
   }.observes('model')
 
