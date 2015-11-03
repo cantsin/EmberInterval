@@ -67,6 +67,15 @@ export default Ember.Controller.extend({
       this.set('to', model.to.format('YYYY-MM-DDTHH:mm:ss'));
     }
     // TODO refresh (only if null)?
-  }.observes('model')
+  }.observes('model'),
 
+  // actions from child components that modify the date/time
+  actions: {
+    changeFromDate: function(from) {
+      this.set('from', from);
+    },
+    changeToDate: function(to) {
+      this.set('to', to);
+    }
+  }
 });
