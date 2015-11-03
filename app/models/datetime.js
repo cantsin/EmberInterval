@@ -1,5 +1,5 @@
 
 export default Ember.Object.extend({
-  from: new Date(),
-  to: new Date()
+  from: moment().subtract(2, 'hours'),
+  to: moment()
 });
