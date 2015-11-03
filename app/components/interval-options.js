@@ -14,6 +14,21 @@ export default Ember.Component.extend({
       hours: hours,
       minutes: minutes
     };
-  }.property('from', 'to')
+  }.property('from', 'to'),
+
+  options: function() {
+    let elapsed = this.get('elapsed');
+    if(elapsed.days < 0) {
+      return [];
+    } else if(elapsed.days < 7) {
+      return [1,2,3,4,5];
+    } else if(elapsed.days < 31) {
+      return [2,3,4,5];
+    } else if(elapsed.days < 366) {
+      return [3,4,5];
+    } else {
+      return [4,5];
+    }
+  }.property('elapsed')
 
 });

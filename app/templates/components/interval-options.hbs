@@ -1,5 +1,27 @@
 <div class="row-fluid">
   <div class="col-md-12">
-    Time Interval: {{elapsed.days}} days {{elapsed.hours}} hours {{elapsed.minutes}} minutes
+    <strong>
+      Time Interval:
+    </strong>
+    {{elapsed.days}} days {{elapsed.hours}} hours {{elapsed.minutes}} minutes
+  </div>
+</div>
+
+<div class="row-fluid">
+  <div class="col-md-12">
+    <strong>
+      Options
+    </strong>
+    <ul>
+      {{#each options as |item|}}
+      <li>
+        Option {{item}}
+      </li>
+      {{else}}
+      <li>
+        No options available.
+      </li>
+      {{/each}}
+    </ul>
   </div>
 </div>
