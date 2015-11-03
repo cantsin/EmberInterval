@@ -6,21 +6,47 @@ moduleForComponent('date-time', 'Integration | Component | date time', {
 });
 
 test('it renders', function(assert) {
-  assert.expect(2);
+  assert.expect(1);
 
-  // Set any properties with this.set('myProperty', 'value');
-  // Handle any actions with this.on('myAction', function(val) { ... });
+  this.set('data', '2015-10-20T11:00:00');
+  this.render(hbs`{{date-time label="Test" data=data}}`);
 
-  this.render(hbs`{{date-time}}`);
+  let text = this.$().text();
+  assert.equal(text.indexOf("Test") >= 0, true);
+});
 
-  assert.equal(this.$().text().trim(), '');
+test('date was formatted properly', function(assert) {
+  assert.expect(1);
 
-  // Template block usage:
-  this.render(hbs`
-    {{#date-time}}
-      template block text
-    {{/date-time}}
-  `);
+  this.set('data', '2015-10-20T11:00:00');
+  this.render(hbs`{{date-time label="Test" data=data}}`);
 
-  assert.equal(this.$().text().trim(), 'template block text');
+  assert.equal(this.$('input:first').val(), '2015-10-20');
+});
+
+test('given invalid values, date returns "Invalid date"', function(assert) {
+  assert.expect(1);
+
+  this.set('data', 'something invalid');
+  this.render(hbs`{{date-time label="Test" data=data}}`);
+
+  assert.equal(this.$('input:first').val(), 'Invalid date');
+});
+
+test('time was formatted properly', function(assert) {
+  assert.expect(1);
+
+  this.set('data', '2015-10-20T11:00:00');
+  this.render(hbs`{{date-time label="Test" data=data}}`);
+
+  assert.equal(this.$('input:last').val(), '11:00:00');
+});
+
+test('given invalid values, time returns "Invalid date"', function(assert) {
+  assert.expect(1);
+
+  this.set('data', 'something invalid');
+  this.render(hbs`{{date-time label="Test" data=data}}`);
+
+  assert.equal(this.$('input:last').val(), 'Invalid date');
 });
