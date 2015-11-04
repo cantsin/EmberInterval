@@ -1,4 +1,5 @@
 import Ember from 'ember';
+import config from '../config/environment';
 
 // In Ember 2.0, controllers are deprecated, but if you want to use
 // query params, it seems like you must have a controller.
@@ -12,7 +13,7 @@ import Ember from 'ember';
 
 // TL;DR this controller is a necessary evil!
 
-let formatter = window.EmberInterval.formatter;
+let formatter = config.APP.formatter;
 
 export default Ember.Controller.extend({
 
@@ -24,6 +25,9 @@ export default Ember.Controller.extend({
   errors: Ember.A([]),
 
   validate (param) {
+    if(param === null) {
+      return false;
+    }
     let regex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/;
     if (param.match(regex) === null) {
       return false;
@@ -44,11 +48,15 @@ export default Ember.Controller.extend({
 
     let fromValid = this.validate(from);
     if(!fromValid) {
-      this.errors.pushObject('Could not parse "from": "' + from + '"');
+      let error = 'Could not parse "from": "' + from +
+          '"; please use the format "' + formatter + '"';
+      this.errors.pushObject(error);
     }
     let toValid = this.validate(to);
     if(!toValid) {
-      this.errors.pushObject('Could not parse "to": "' + to + '"');
+      let error = 'Could not parse "to": "' + to +
+          '"; please use the format "' + formatter + '"';
+      this.errors.pushObject(error);
     }
     if(fromValid && toValid) {
       if(fromValid.isAfter(toValid)) {
@@ -67,7 +75,6 @@ export default Ember.Controller.extend({
     if(this.get('to') === null) {
       this.set('to', model.to.format(formatter));
     }
-    // TODO refresh (only if null)?
   }.observes('model'),
 
   // actions from child components that modify the date/time

@@ -1,6 +1,7 @@
 import Ember from 'ember';
+import config from '../config/environment';
 
-let formatter = window.EmberInterval.formatter;
+let formatter = config.APP.formatter;
 
 export default Ember.Component.extend({
 
